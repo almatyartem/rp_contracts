@@ -32,5 +32,10 @@ class GatewayServiceProvider extends ServiceProvider
         $this->app->when(GatewayApi::class)
             ->needs('$isDebug')
             ->give(env('APP_ENV') == 'local');
+
+        $this->app->bind('coreapi',function(){
+            return new CoreApi($this->app->make(GatewayApi::class));
+
+        });
     }
 }
