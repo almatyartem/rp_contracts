@@ -149,7 +149,7 @@ class CoreApi
 
         $uri = 'crud/'.$entity.($id ? '/'.$id : '').($getParams ? '?'.http_build_query($getParams) : '');
 
-        $response = $this->gatewayApi->proxy($this->coreAppCode, $uri, $requestMethod, $params);
+        $response = $this->gatewayApi->request($this->coreAppCode, $requestMethod, $uri, $params);
 
         $data = $this->gatewayApi->getData($response);
 

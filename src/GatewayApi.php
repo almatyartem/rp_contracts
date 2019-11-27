@@ -64,19 +64,6 @@ class GatewayApi
     }
 
     /**
-     * @param string $api
-     * @param string $uri
-     * @param string $method
-     * @param array $postData
-     * @return Response
-     * @throws GuzzleException
-     */
-    public function proxy(string $api, string $uri, string $method, array $postData = []) : Response
-    {
-        return $this->request($api, $method, $uri, $postData);
-    }
-
-    /**
      * @throws GuzzleException|\Exception
      */
     protected function needAuth() : void
