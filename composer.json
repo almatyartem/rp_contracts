@@ -1,0 +1,9 @@
+{
+  "name": "_ft/apisdk",
+  "description": "API SDK",
+  "require": {
+    "php": ">=7.0.0"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
