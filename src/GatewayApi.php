@@ -73,11 +73,7 @@ class GatewayApi
      */
     public function proxy(string $api, string $uri, string $method, array $postData = []) : Response
     {
-        return $this->request('api/proxy/'.$api, 'POST', $postData, [
-            'X-Method' => $method,
-            'X-Uri' => $uri,
-            'X-Env' => $this->env,
-        ]);
+        return $this->request($api, $method, $uri, $postData);
     }
 
     /**
@@ -87,7 +83,7 @@ class GatewayApi
     {
         if(!$this->token)
         {
-            if(!$this->token = $this->getData($this->request('oauth/token', 'post',
+            if(!$this->token = $this->getData($this->request('auth',  'post', 'oauth/token',
                 [
                     'grant_type' => 'client_credentials',
                     'client_id' => $this->clientId,
@@ -108,7 +104,7 @@ class GatewayApi
      * @return Response
      * @throws GuzzleException
      */
-    public function request(string $url, string $method, array $data = [], array $addHeaders = [], $needAuth = true) : Response
+    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = [], $needAuth = true) : Response
     {
         $options = [];
 
@@ -139,7 +135,7 @@ class GatewayApi
             $data['XDEBUG_SESSION_START'] = 'PHPSTORM';
         }
 
-        $result = $this->httpClient->request($method, $this->endpoint . '/' . $url, $options);
+        $result = $this->httpClient->request($method, $this->endpoint.'/'.$this->env.'/'.$api.'/'. $url, $options);
 
         return $result;
     }
