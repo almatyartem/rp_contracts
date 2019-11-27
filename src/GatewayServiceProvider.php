@@ -13,13 +13,7 @@ class GatewayServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(GatewayApi::class, function ($app)
-        {
-            return new GatewayApi($app->make(Client::class), env('GATEWAY_API_URL'), env('GATEWAY_API_ENV'),
-                env('GATEWAY_API_CLIENT_ID'), env('GATEWAY_API_CLIENT_SECRET'), env('APP_ENV') == 'local');
-        });
-
-        /*$this->app->when(GatewayApi::class)
+        $this->app->when(GatewayApi::class)
             ->needs('$endpoint')
             ->give(env('GATEWAY_API_URL'));
 
@@ -37,6 +31,6 @@ class GatewayServiceProvider extends ServiceProvider
 
         $this->app->when(GatewayApi::class)
             ->needs('$isDebug')
-            ->give(env('APP_ENV') == 'local');*/
+            ->give(env('APP_ENV') == 'local');
     }
 }
