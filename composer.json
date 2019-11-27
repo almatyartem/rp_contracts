@@ -18,7 +18,10 @@
     "laravel": {
       "providers": [
         "ApiSdk\\GatewayServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "CoreApi": "ApiSdk\\Facades\\CoreApi"
+      }
     }
   }
 }
