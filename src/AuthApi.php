@@ -81,10 +81,10 @@ class AuthApi
      * @return mixed
      * @throws GuzzleException
      */
-    public function getUserByToken()
+    public function getUserByToken($token)
     {
         $response = $this->gatewayApi->request($this->authAppCode , 'get','api/user',  [], [
-            'Authorization' => 'Bearer ' .session()->get('access_token')
+            'Authorization' => 'Bearer ' .$token
         ], false);
 
         $user = $this->gatewayApi->getData($response);
