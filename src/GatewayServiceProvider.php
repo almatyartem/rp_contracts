@@ -35,7 +35,9 @@ class GatewayServiceProvider extends ServiceProvider
 
         $this->app->when(StructureApi::class)
             ->needs('$structure')
-            ->give(json_decode(file_get_contents(base_path('config/structure.json')), true));
+            ->give(function(){
+                return json_decode(file_get_contents(base_path('config/structure.json')), true);
+            });
 
         $this->app->bind('coreapi',function(){
             return $this->app->make(CoreApi::class);
