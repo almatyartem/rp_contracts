@@ -127,7 +127,7 @@ class GatewayApi
 
         if($addHeaders)
         {
-                $options['headers'] = array_merge($options['headers'], $addHeaders);
+            $options['headers'] = array_merge($options['headers'], $addHeaders);
         }
 
         if($this->isDebug)
