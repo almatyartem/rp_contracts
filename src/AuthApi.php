@@ -40,9 +40,11 @@ class AuthApi
             'client_secret' => env('GATEWAY_API_CLIENT_SECRET'),
         ], [], false);
 
-        if($response and isset($response['access_token']) and $response['access_token'])
+        $data = $this->gatewayApi->getData($response);
+
+        if($data and isset($data['access_token']) and $data['access_token'])
         {
-            return $response['access_token'];
+            return $data['access_token'];
         }
 
         return null;
@@ -65,9 +67,11 @@ class AuthApi
             'code' => $code,
         ], [], false);
 
-        if($response and isset($response['access_token']) and $response['access_token'])
+        $data = $this->gatewayApi->getData($response);
+
+        if($data and isset($data['access_token']) and $data['access_token'])
         {
-            return $response['access_token'];
+            return $data['access_token'];
         }
 
         return null;
