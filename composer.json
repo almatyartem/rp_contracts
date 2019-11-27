@@ -10,5 +10,12 @@
     "psr-4": {
       "ApiSdk\\": "src/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "ApiSdk\\GatewayServiceProvider"
+      ]
+    }
   }
 }

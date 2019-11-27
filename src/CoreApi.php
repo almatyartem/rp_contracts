@@ -12,11 +12,6 @@ class CoreApi
     public $gatewayApi;
 
     /**
-     * @var bool
-     */
-    protected $isDebug;
-
-    /**
      * @var string
      */
     protected $coreAppCode = 'core';
@@ -24,12 +19,10 @@ class CoreApi
     /**
      * CoreApi constructor.
      * @param GatewayApi $gatewayApi
-     * @param bool $isDebug
      */
-    public function __construct(GatewayApi $gatewayApi, bool $isDebug = false)
+    public function __construct(GatewayApi $gatewayApi)
     {
         $this->gatewayApi = $gatewayApi;
-        $this->isDebug = $isDebug;
     }
 
     /**
@@ -153,10 +146,6 @@ class CoreApi
                 $getParams = $params;
         }
 
-        if($this->isDebug)
-        {
-            $getParams['XDEBUG_SESSION_START'] = 'PHPSTORM';
-        }
 
         $uri = 'crud/'.$entity.($id ? '/'.$id : '').($getParams ? '?'.http_build_query($getParams) : '');
 
