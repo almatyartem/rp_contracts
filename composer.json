@@ -20,7 +20,8 @@
         "ApiSdk\\GatewayServiceProvider"
       ],
       "aliases": {
-        "CoreApi": "ApiSdk\\Facades\\CoreApi"
+        "CoreApi": "ApiSdk\\Facades\\CoreApi",
+        "StructureApi": "ApiSdk\\Facades\\StructureApi"
       }
     }
   }

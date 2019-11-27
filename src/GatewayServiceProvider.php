@@ -33,9 +33,16 @@ class GatewayServiceProvider extends ServiceProvider
             ->needs('$isDebug')
             ->give(env('APP_ENV') == 'local');
 
+        $this->app->when(StructureApi::class)
+            ->needs('$structure')
+            ->give(json_decode(file_get_contents(base_path('config/structure.json')), true));
+
         $this->app->bind('coreapi',function(){
             return new CoreApi($this->app->make(GatewayApi::class));
+        });
 
+        $this->app->bind('structureapi',function(){
+            return $this->app->make(StructureApi::class);
         });
     }
 }
