@@ -28,24 +28,18 @@ class CoreApi
     /**
      * @param string $entity
      * @param array $where
-     * @param array $with
      * @param array $addParams
      * @return array|null
      * @throws ValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function find(string $entity, array $where = [], array $with = [], array $addParams = []) : ?array
+    public function find(string $entity, array $where = [], array $addParams = []) : ?array
     {
         $params = [];
 
         if($where)
         {
             $params['filter'] = $where;
-        }
-
-        if($with)
-        {
-            $addParams['with'] = $with;
         }
 
         $params = array_merge($params, $addParams);
@@ -56,14 +50,14 @@ class CoreApi
     /**
      * @param string $endpoint
      * @param array $where
-     * @param array $with
+     * @param array $addParams
      * @return array|null
      * @throws ValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function findFirst(string $entity, array $where = [], array $with = []) : ?array
+    public function findFirst(string $entity, array $where = [], array $addParams = []) : ?array
     {
-        return $this->find($entity, $where, $with)[0] ?? null;
+        return $this->find($entity, $where, $addParams)[0] ?? null;
     }
 
     /**
@@ -149,7 +143,7 @@ class CoreApi
 
         $uri = 'crud/'.$entity.($id ? '/'.$id : '').($getParams ? '?'.http_build_query($getParams) : '');
 
-        $response = $this->gatewayApi->request($this->coreAppCode, $requestMethod, $uri, $params);
+        $response = $this->gatewayApi->request($this->coreAppCode, $requestMethod, $uri,    $params);
 
         $data = $this->gatewayApi->getData($response);
 
