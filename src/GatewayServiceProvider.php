@@ -22,7 +22,7 @@ class GatewayServiceProvider extends ServiceProvider
             ->give(env('GATEWAY_API_ENV'));
 
         $this->app->when(GatewayApi::class)
-            ->needs('app')
+            ->needs('$app')
             ->give(env('GATEWAY_API_APP'));
 
         $this->app->when(GatewayApi::class)
