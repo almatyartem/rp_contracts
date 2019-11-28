@@ -22,22 +22,17 @@ class GatewayApi
     /**
      * @var string
      */
-    protected $env;
+    public $env;
 
     /**
      * @var string
      */
-    protected $clientId;
+    protected $token;
 
     /**
      * @var string
      */
-    protected $clientSecret;
-
-    /**
-     * @var string
-     */
-    protected $token = null;
+    public $app;
 
     /**
      * @var bool
@@ -53,33 +48,14 @@ class GatewayApi
      * @param string $clientSecret
      * @param bool $isDebug
      */
-    public function __construct(Client $httpClient, string $endpoint, string $env, string $clientId, string $clientSecret, bool $isDebug = false)
+    public function __construct(Client $httpClient, string $endpoint, string $env, string $app, string $token, bool $isDebug = false)
     {
         $this->httpClient = $httpClient;
         $this->endpoint = $endpoint;
         $this->env = $env;
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
+        $this->app = $app;
+        $this->token = $token;
         $this->isDebug = $isDebug;
-    }
-
-    /**
-     * @throws GuzzleException|\Exception
-     */
-    protected function needAuth() : void
-    {
-        if(!$this->token)
-        {
-            if(!$this->token = $this->getData($this->request('auth',  'post', 'oauth/token',
-                [
-                    'grant_type' => 'client_credentials',
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                ], [], false))['access_token'] ?? null)
-            {
-                throw new \Exception('Gateway auth error');
-            }
-        }
     }
 
     /**
@@ -91,7 +67,7 @@ class GatewayApi
      * @return Response
      * @throws GuzzleException
      */
-    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = [], $needAuth = true) : Response
+    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = []) : Response
     {
         $options = [];
 
@@ -105,12 +81,8 @@ class GatewayApi
             'Accept' => 'application/json'
         ];
 
-        if($needAuth)
-        {
-            $this->needAuth();
-
-            $options['headers']['Authorization'] = 'Bearer ' . $this->token;
-        }
+        $options['headers']['X-App'] = $this->app;
+        $options['headers']['X-App-Token'] = $this->token;
 
         if($addHeaders)
         {

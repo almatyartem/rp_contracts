@@ -22,12 +22,12 @@ class GatewayServiceProvider extends ServiceProvider
             ->give(env('GATEWAY_API_ENV'));
 
         $this->app->when(GatewayApi::class)
-            ->needs('$clientId')
-            ->give(env('GATEWAY_API_CLIENT_ID'));
+            ->needs('app')
+            ->give(env('GATEWAY_API_APP'));
 
         $this->app->when(GatewayApi::class)
-            ->needs('$clientSecret')
-            ->give(env('GATEWAY_API_CLIENT_SECRET'));
+            ->needs('$token')
+            ->give(env('GATEWAY_API_APP_TOKEN'));
 
         $this->app->when(GatewayApi::class)
             ->needs('$isDebug')
@@ -38,6 +38,14 @@ class GatewayServiceProvider extends ServiceProvider
             ->give(function(){
                 return json_decode(file_get_contents(base_path('config/structure.json')), true);
             });
+
+        $this->app->when(AuthApi::class)
+            ->needs('$clientId')
+            ->give(env('AUTH_API_CLIENT_ID'));
+
+        $this->app->when(AuthApi::class)
+            ->needs('$clientSecret')
+            ->give(env('AUTH_API_CLIENT_SECRET'));
 
         $this->app->bind('coreapi',function(){
             return $this->app->make(CoreApi::class);

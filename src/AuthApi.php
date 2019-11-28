@@ -20,12 +20,24 @@ class AuthApi
     protected $authAppCode = 'auth';
 
     /**
+     * @var string
+     */
+    protected $clientId;
+
+    /**
+     * @var string
+     */
+    protected $clientSecret;
+
+    /**
      * CoreApi constructor.
      * @param GatewayApi $gatewayApi
      */
-    public function __construct(GatewayApi $gatewayApi)
+    public function __construct(GatewayApi $gatewayApi, string $clientId, string $clientSecret)
     {
         $this->gatewayApi = $gatewayApi;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
     }
 
     /**
@@ -36,8 +48,8 @@ class AuthApi
     {
         $response = $this->gatewayApi->request($this->authAppCode , 'post','oauth/token',  [
             'grant_type' => 'client_credentials',
-            'client_id' => env('GATEWAY_API_CLIENT_ID'),
-            'client_secret' => env('GATEWAY_API_CLIENT_SECRET'),
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
         ], [], false);
 
         $data = $this->gatewayApi->getData($response);
@@ -61,9 +73,9 @@ class AuthApi
 
         $response = $this->gatewayApi->request($this->authAppCode , 'post','oauth/token',  [
             'grant_type' => 'authorization_code',
-            'client_id' => env('GATEWAY_API_CLIENT_ID'),
-            'client_secret' => env('GATEWAY_API_CLIENT_SECRET'),
-            'redirect_uri' => env('APP_URL').'/oauth_callback',
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            //'redirect_uri' => env('APP_URL').'/oauth_callback',
             'code' => $code,
         ], [], false);
 
@@ -83,7 +95,7 @@ class AuthApi
      */
     public function getUserByToken($token)
     {
-        $response = $this->gatewayApi->request($this->authAppCode , 'get','api/user',  [], [
+        $response = $this->gatewayApi->request($this->authAppCode , 'get','api/user?env='.$this->gatewayApi->env.'&app='.$this->gatewayApi->app,  [], [
             'Authorization' => 'Bearer ' .$token
         ], false);
 
