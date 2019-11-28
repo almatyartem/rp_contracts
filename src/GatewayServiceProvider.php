@@ -47,6 +47,10 @@ class GatewayServiceProvider extends ServiceProvider
             ->needs('$clientSecret')
             ->give(env('AUTH_API_CLIENT_SECRET'));
 
+        $this->app->when(AuthApi::class)
+            ->needs('$oauthCallback')
+            ->give(env('APP_URL').'/oauth_callback');
+
         $this->app->bind('coreapi',function(){
             return $this->app->make(CoreApi::class);
         });

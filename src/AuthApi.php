@@ -30,14 +30,20 @@ class AuthApi
     protected $clientSecret;
 
     /**
+     * @var string
+     */
+    protected $oauthCallback;
+
+    /**
      * CoreApi constructor.
      * @param GatewayApi $gatewayApi
      */
-    public function __construct(GatewayApi $gatewayApi, string $clientId, string $clientSecret)
+    public function __construct(GatewayApi $gatewayApi, string $clientId, string $clientSecret, string $oauthCallback)
     {
         $this->gatewayApi = $gatewayApi;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->oauthCallback = $oauthCallback;
     }
 
     /**
@@ -75,7 +81,7 @@ class AuthApi
             'grant_type' => 'authorization_code',
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            //'redirect_uri' => env('APP_URL').'/oauth_callback',
+            'redirect_uri' => $this->oauthCallback,
             'code' => $code,
         ], [], false);
 
