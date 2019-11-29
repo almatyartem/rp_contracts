@@ -71,7 +71,7 @@ class GatewayApi
     {
         $options = [];
 
-        if($data and $method!='get')
+        if($data and $method != 'get')
         {
             $options['form_params'] = $data;
         }
