@@ -7,7 +7,7 @@ class StructureApi
     /**
      * @var array
      */
-    protected $structure = [];
+    public $structure = [];
 
     /**
      * StructureApi constructor.
@@ -16,19 +16,6 @@ class StructureApi
     public function __construct(array $structure)
     {
         $this->structure = $structure;
-    }
-
-    /**
-     * @return array|null
-     */
-    protected function loadStructure() : ?array
-    {
-        if($content = file_get_contents(base_path('config/structure.json')))
-        {
-            return json_decode($content, true);
-        }
-
-        return null;
     }
 
     /**
