@@ -127,16 +127,16 @@ class CoreApi
         switch($method)
         {
             case 'create':
-                $requestMethod = 'POST';
+                $requestMethod = 'post';
                 break;
             case 'delete':
-                $requestMethod = 'DELETE';
+                $requestMethod = 'delete';
                 break;
             case 'patch':
-                $requestMethod = 'PATCH';
+                $requestMethod = 'patch';
                 break;
             default:
-                $requestMethod = 'GET';
+                $requestMethod = 'get';
                 $getParams = $params;
         }
 

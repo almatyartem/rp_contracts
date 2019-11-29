@@ -71,7 +71,7 @@ class GatewayApi
     {
         $options = [];
 
-        if($data)
+        if($data and (!in_array($method, ['get', 'delete'])))
         {
             $options['form_params'] = $data;
         }
