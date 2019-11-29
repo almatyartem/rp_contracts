@@ -71,9 +71,13 @@ class GatewayApi
     {
         $options = [];
 
-        if($data and (!in_array($method, ['get', 'delete'])))
+        if($data and $method!='get')
         {
             $options['form_params'] = $data;
+        }
+        if($method == 'delete' and !$data)
+        {
+            $options['form_params'] = ['delete' => true];
         }
 
         $options['headers'] = [
