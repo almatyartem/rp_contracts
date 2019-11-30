@@ -33,5 +33,9 @@ class GatewayServiceProvider extends ServiceProvider
         $this->app->bind('structureapi',function($app){
             return $app->make('ApiSdk\StructureApi');
         });
+
+        $this->app->bind('reportsapi',function($app){
+            return $app->make('ApiSdk\ReportsApi');
+        });
     }
 }
