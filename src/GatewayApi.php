@@ -80,14 +80,7 @@ class GatewayApi
             $options['form_params'] = ['delete' => true];
         }
 
-        if($api == 'reports')
-        {
-            $options['headers'] = ['Content-type' => 'application/json'];
-        }
-        else
-        {
-            $options['headers'] = ['Content-type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json'];
-        }
+        $options['headers'] = ['Content-type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json'];
 
         $options['headers']['X-App'] = $this->app;
         $options['headers']['X-App-Token'] = $this->token;
