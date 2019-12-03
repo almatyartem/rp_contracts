@@ -37,5 +37,9 @@ class GatewayServiceProvider extends ServiceProvider
         $this->app->bind('reportsapi',function($app){
             return $app->make('ApiSdk\ReportsApi');
         });
+
+        $this->app->bind('filesapi',function($app){
+            return $app->make('ApiSdk\FilesApi');
+        });
     }
 }
