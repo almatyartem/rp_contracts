@@ -57,6 +57,8 @@ class CoreApi
      */
     public function findFirst(string $entity, array $where = [], array $addParams = []) : ?array
     {
+        $addParams = ['count' => 1];
+
         return $this->find($entity, $where, $addParams)[0] ?? null;
     }
 
