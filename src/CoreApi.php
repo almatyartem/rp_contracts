@@ -2,7 +2,7 @@
 
 namespace ApiSdk;
 
-use Illuminate\Validation\ValidationException;
+use ApiSdk\Exceptions\CoreValidationException;
 
 class CoreApi
 {
@@ -153,7 +153,7 @@ class CoreApi
         {
             if(isset($data['error']['validation_errors']))
             {
-                throw new ValidationException($response['error']['validation_errors']);
+                throw new CoreValidationException($response['error']['validation_errors']);
             }
         }
 
