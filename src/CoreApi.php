@@ -153,7 +153,7 @@ class CoreApi
         {
             if(isset($data['error']['validation_errors']))
             {
-                throw new CoreValidationException($response['error']['validation_errors']);
+                throw new CoreValidationException($data['error']['validation_errors']);
             }
         }
 
