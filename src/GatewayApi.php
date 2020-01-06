@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\ClientException;
 
 class GatewayApi
 {
@@ -95,7 +96,14 @@ class GatewayApi
             $data['XDEBUG_SESSION_START'] = 'PHPSTORM';
         }
 
-        $result = $this->httpClient->request($method, $this->endpoint.'/'.$this->env.'/'.$api.'/'. $url, $options);
+        try
+        {
+            $result = $this->httpClient->request($method, $this->endpoint.'/'.$this->env.'/'.$api.'/'. $url, $options);
+        }
+        catch(ClientException $exception)
+        {
+            return $exception->getResponse();
+        }
 
         return $result;
     }
