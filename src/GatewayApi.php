@@ -93,7 +93,7 @@ class GatewayApi
 
         if($this->isDebug)
         {
-            $data['XDEBUG_SESSION_START'] = 'PHPSTORM';
+            $url .= (strpos($url,'?') ? '&' : '?').'XDEBUG_SESSION_START=PHPSTORM';
         }
 
         try
