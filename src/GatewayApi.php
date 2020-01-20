@@ -74,14 +74,14 @@ class GatewayApi
 
         if($data and $method != 'get')
         {
-            $options['form_params'] = $data;
+            $options['json'] = $data;
         }
         if($method == 'delete' and !$data)
         {
             $options['form_params'] = ['delete' => true];
         }
 
-        $options['headers'] = ['Content-type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json'];
+        $options['headers'] = ['Content-type' => 'application/json', 'Accept' => 'application/json'];
 
         $options['headers']['X-App'] = $this->app;
         $options['headers']['X-App-Token'] = $this->token;
