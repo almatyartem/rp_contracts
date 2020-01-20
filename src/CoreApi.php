@@ -2,6 +2,7 @@
 
 namespace ApiSdk;
 
+use ApiSdk\Exceptions\CoreDeleteException;
 use ApiSdk\Exceptions\CoreValidationException;
 
 class CoreApi
@@ -154,6 +155,10 @@ class CoreApi
             if(isset($data['error']['validation_errors']))
             {
                 throw new CoreValidationException($data['error']['validation_errors']);
+            }
+            if(isset($data['error']['relations_exist']))
+            {
+                throw new CoreDeleteException($data['error']['relations_exist']);
             }
         }
 
