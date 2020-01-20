@@ -77,7 +77,14 @@ class GatewayApi
             $options['json'] = $data;
         }
 
-        $options['headers'] = ['Content-type' => 'application/json', 'Accept' => 'application/json'];
+        if($method == 'get')
+        {
+            $options['headers'] = ['Content-type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json'];
+        }
+        else
+        {
+            $options['headers'] = ['Content-type' => 'application/json', 'Accept' => 'application/json'];
+        }
 
         $options['headers']['X-App'] = $this->app;
         $options['headers']['X-App-Token'] = $this->token;
