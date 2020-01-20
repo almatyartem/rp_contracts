@@ -76,10 +76,6 @@ class GatewayApi
         {
             $options['json'] = $data;
         }
-        if($method == 'delete' and !$data)
-        {
-            $options['form_params'] = ['delete' => true];
-        }
 
         $options['headers'] = ['Content-type' => 'application/json', 'Accept' => 'application/json'];
 
