@@ -31,7 +31,6 @@ class CoreApi
      * @param array $where
      * @param array $addParams
      * @return array|null
-     * @throws ValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function find(string $entity, array $where = [], array $addParams = []) : ?array
@@ -49,11 +48,10 @@ class CoreApi
     }
 
     /**
-     * @param string $endpoint
+     * @param string $entity
      * @param array $where
      * @param array $addParams
      * @return array|null
-     * @throws ValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findFirst(string $entity, array $where = [], array $addParams = []) : ?array
@@ -64,28 +62,42 @@ class CoreApi
     }
 
     /**
-     * @param string $endpoint
+     * @param string $entity
      * @param array $data
      * @return array|null
-     * @throws ValidationException
+     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(string $entity, array $data) : ?array
     {
-        return $this->call($entity, 'create', null, $data);
+        $result = $this->call($entity, 'create', null, $data);
+
+        if(isset($result['error']['validation_errors']))
+        {
+            throw new CoreValidationException($data['error']['validation_errors']);
+        }
+
+        return $result;
     }
 
     /**
-     * @param string $endpoint
+     * @param string $entity
      * @param $id
      * @param array $data
      * @return array|null
-     * @throws ValidationException
+     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function patch(string $entity, $id, array $data) : ?array
     {
-        return $this->call($entity, 'patch', $id, $data);
+        $result = $this->call($entity, 'patch', $id, $data);
+
+        if(isset($result['error']['validation_errors']))
+        {
+            throw new CoreValidationException($data['error']['validation_errors']);
+        }
+
+        return $result;
     }
 
     /**
@@ -93,7 +105,7 @@ class CoreApi
      * @param $id
      * @param array $with
      * @return array|null
-     * @throws ValidationException
+     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function show(string $entity, $id, $with = []) : ?array
@@ -106,12 +118,19 @@ class CoreApi
      * @param $id
      * @param array $with
      * @return bool
-     * @throws ValidationException
+     * @throws CoreDeleteException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete(string $entity, $id, $with = []) : bool
     {
-        return $this->call($entity, 'delete', $id, $with ? ['with' => $with] : [])['success'] ?? false;
+        $data = $this->call($entity, 'delete', $id, $with ? ['with' => $with] : []);
+
+        if(isset($data['error']['relations_exist']))
+        {
+            throw new CoreDeleteException($data['error']['relations_exist']);
+        }
+
+        return $data['success'] ?? false;
     }
 
     /**
@@ -120,7 +139,6 @@ class CoreApi
      * @param null $id
      * @param array $params
      * @return array|null
-     * @throws ValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function call(string $entity, string $method, $id = null, array $params = []) : ?array
@@ -149,18 +167,6 @@ class CoreApi
         $response = $this->gatewayApi->request($this->coreAppCode, $requestMethod, $uri, $params);
 
         $data = $this->gatewayApi->getData($response);
-
-        if($response->getStatusCode() >= 300)
-        {
-            if(isset($data['error']['validation_errors']))
-            {
-                throw new CoreValidationException($data['error']['validation_errors']);
-            }
-            if(isset($data['error']['relations_exist']))
-            {
-                throw new CoreDeleteException($data['error']['relations_exist']);
-            }
-        }
 
         return $data;
     }

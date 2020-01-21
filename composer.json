@@ -2,7 +2,10 @@
   "name": "_ft/apisdk",
   "description": "API SDK",
   "require": {
-    "php": ">=7.0.0"
+    "php": ">=7.1",
+    "ext-json": "*",
+    "laravel/framework": "5.8.*",
+    "guzzlehttp/guzzle": "^6.4"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,

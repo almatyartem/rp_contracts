@@ -45,8 +45,8 @@ class GatewayApi
      * @param Client $httpClient
      * @param string $endpoint
      * @param string $env
-     * @param string $clientId
-     * @param string $clientSecret
+     * @param string $app
+     * @param string $token
      * @param bool $isDebug
      */
     public function __construct(Client $httpClient, string $endpoint, string $env, string $app, string $token, bool $isDebug = false)
@@ -60,13 +60,13 @@ class GatewayApi
     }
 
     /**
-     * @param string $url
+     * @param string $api
      * @param string $method
+     * @param string $url
      * @param array $data
      * @param array $addHeaders
-     * @param bool $needAuth
-     * @return Response
      * @throws GuzzleException
+     * @return Response
      */
     public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = []) : Response
     {
