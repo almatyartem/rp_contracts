@@ -4,7 +4,7 @@ namespace ApiSdk\Exceptions;
 
 class CoreDeleteException extends \Exception
 {
-    public $errors;
+    public $relations;
 
     /**
      * ValidationError constructor.
