@@ -2,9 +2,7 @@
 
 namespace ApiSdk;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\ResponseInterface;
 
 class AuthApi
 {
