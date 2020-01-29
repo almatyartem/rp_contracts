@@ -36,4 +36,25 @@ class FilesApi
 
         return $result['code'] ?? null;
     }
+
+    /**
+     * @param $image
+     * @param null $width
+     * @param null $height
+     * @return string|null
+     */
+    public function getImageUrl($image, $width = null, $height = null) : ?string
+    {
+        $add = [];
+
+        if($width)
+        {
+            $add[] = 'width='.$width;
+        }
+        if($height)
+        {
+            $add[] = 'height='.$height;
+        }
+        return env('IMAGES_URL') . '/' . $image.($add ? '?'.implode('&', $add) : '');
+    }
 }
