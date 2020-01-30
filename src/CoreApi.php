@@ -94,7 +94,7 @@ class CoreApi
 
         if(isset($result['error']['validation_errors']))
         {
-            throw new CoreValidationException($data['error']['validation_errors']);
+            throw new CoreValidationException($result['error']['validation_errors']);
         }
 
         return $result;
