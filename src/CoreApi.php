@@ -66,7 +66,7 @@ class CoreApi
      * @param string $entity
      * @param array $data
      * @return array|null
-     * @throws ValidationException
+     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(string $entity, array $data) : ?array
@@ -75,7 +75,7 @@ class CoreApi
 
         if(isset($result['error']['validation_errors']))
         {
-            throw new ValidationException($result['error']['validation_errors']);
+            throw new CoreValidationException($result['error']['validation_errors']);
         }
 
         return $result;
@@ -86,7 +86,7 @@ class CoreApi
      * @param $id
      * @param array $data
      * @return array|null
-     * @throws ValidationException
+     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function patch(string $entity, $id, array $data) : ?array
@@ -95,7 +95,7 @@ class CoreApi
 
         if(isset($result['error']['validation_errors']))
         {
-            throw new ValidationException($result['error']['validation_errors']);
+            throw new CoreValidationException($result['error']['validation_errors']);
         }
 
         return $result;
