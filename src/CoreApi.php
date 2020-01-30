@@ -2,10 +2,6 @@
 
 namespace ApiSdk;
 
-use ApiSdk\Exceptions\CoreDeleteException;
-use ApiSdk\Exceptions\CoreValidationException;
-use Illuminate\Validation\ValidationException;
-
 class CoreApi
 {
     /**
@@ -66,8 +62,8 @@ class CoreApi
      * @param string $entity
      * @param array $data
      * @return array|null
-     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function create(string $entity, array $data) : ?array
     {
@@ -75,7 +71,7 @@ class CoreApi
 
         if(isset($result['error']['validation_errors']))
         {
-            throw new CoreValidationException($result['error']['validation_errors']);
+            throw new \Exception(json_encode($result['error']['validation_errors']), 666);
         }
 
         return $result;
@@ -86,8 +82,8 @@ class CoreApi
      * @param $id
      * @param array $data
      * @return array|null
-     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function patch(string $entity, $id, array $data) : ?array
     {
@@ -95,7 +91,7 @@ class CoreApi
 
         if(isset($result['error']['validation_errors']))
         {
-            throw new CoreValidationException($result['error']['validation_errors']);
+            throw new \Exception(json_encode($data['error']['validation_errors']), 666);
         }
 
         return $result;
@@ -106,8 +102,8 @@ class CoreApi
      * @param $id
      * @param array $with
      * @return array|null
-     * @throws CoreValidationException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function show(string $entity, $id, $with = []) : ?array
     {
@@ -119,8 +115,8 @@ class CoreApi
      * @param $id
      * @param array $with
      * @return bool
-     * @throws CoreDeleteException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function delete(string $entity, $id, $with = []) : bool
     {
@@ -128,7 +124,7 @@ class CoreApi
 
         if(isset($data['error']['relations_exist']))
         {
-            throw new CoreDeleteException($data['error']['relations_exist']);
+            throw new \Exception(json_encode($data['error']['relations_exist']), 666);
         }
 
         return $data['success'] ?? false;
