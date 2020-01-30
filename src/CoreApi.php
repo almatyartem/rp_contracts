@@ -91,7 +91,7 @@ class CoreApi
 
         if(isset($result['error']['validation_errors']))
         {
-            throw new \Exception(json_encode($data['error']['validation_errors']), 666);
+            throw new \Exception(json_encode($result['error']['validation_errors']), 666);
         }
 
         return $result;
@@ -120,14 +120,14 @@ class CoreApi
      */
     public function delete(string $entity, $id, $with = []) : bool
     {
-        $data = $this->call($entity, 'delete', $id, $with ? ['with' => $with] : []);
+        $result = $this->call($entity, 'delete', $id, $with ? ['with' => $with] : []);
 
-        if(isset($data['error']['relations_exist']))
+        if(isset($result['error']['relations_exist']))
         {
-            throw new \Exception(json_encode($data['error']['relations_exist']), 666);
+            throw new \Exception(json_encode($result['error']['relations_exist']), 666);
         }
 
-        return $data['success'] ?? false;
+        return $result['success'] ?? false;
     }
 
     /**
