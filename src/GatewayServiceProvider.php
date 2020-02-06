@@ -19,30 +19,30 @@ class GatewayServiceProvider extends ServiceProvider
             {
                 return new GatewayApi($app->make('GuzzleHttp\Client'), $apiUrl, $apiEnv, $apiApp, $apiToken, env('APP_ENV') == 'local');
             });
-        }
 
-        if($authClientId = env('AUTH_API_CLIENT_ID') and $authClientSecret = env('AUTH_API_CLIENT_SECRET'))
-        {
-            $this->app->singleton('ApiSdk\AuthApi', function($app) use ($authClientId, $authClientSecret)
+            if($authClientId = env('AUTH_API_CLIENT_ID') and $authClientSecret = env('AUTH_API_CLIENT_SECRET'))
             {
-                return new AuthApi($app->make('ApiSdk\GatewayApi'), $authClientId, $authClientSecret, env('APP_URL') . '/oauth_callback');
+                $this->app->singleton('ApiSdk\AuthApi', function($app) use ($authClientId, $authClientSecret)
+                {
+                    return new AuthApi($app->make('ApiSdk\GatewayApi'), $authClientId, $authClientSecret, env('APP_URL') . '/oauth_callback');
+                });
+            }
+
+            $this->app->bind('coreapi',function($app){
+                return $app->make('ApiSdk\CoreApi');
+            });
+
+            $this->app->bind('reportsapi',function($app){
+                return $app->make('ApiSdk\ReportsApi');
+            });
+
+            $this->app->bind('filesapi',function($app){
+                return $app->make('ApiSdk\FilesApi');
+            });
+
+            $this->app->bind('authapi',function($app){
+                return $app->make('ApiSdk\AuthApi');
             });
         }
-
-        $this->app->bind('coreapi',function($app){
-            return $app->make('ApiSdk\CoreApi');
-        });
-
-        $this->app->bind('reportsapi',function($app){
-            return $app->make('ApiSdk\ReportsApi');
-        });
-
-        $this->app->bind('filesapi',function($app){
-            return $app->make('ApiSdk\FilesApi');
-        });
-
-        $this->app->bind('authapi',function($app){
-            return $app->make('ApiSdk\AuthApi');
-        });
     }
 }
