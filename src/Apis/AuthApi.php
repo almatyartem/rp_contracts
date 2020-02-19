@@ -57,7 +57,7 @@ class AuthApi
         $this->oauthCallback = $oauthCallback;
         $this->env = $env;
         $this->app = $app;
-        $this->api = $api ?? 'files';
+        $this->api = $api ?? 'auth';
     }
 
     /**

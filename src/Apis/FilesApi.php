@@ -21,7 +21,7 @@ class FilesApi
     public function __construct(RequestProvider $provider, $api = null)
     {
         $this->provider = $provider;
-        $this->api = $api ?? 'auth';
+        $this->api = $api ?? 'files';
     }
 
     /**
