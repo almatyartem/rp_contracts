@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
 use GuzzleHttp\Exception\ClientException;
