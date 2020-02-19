@@ -1,0 +1,47 @@
+<?php
+
+namespace ApiSdk;
+
+use App\DirectRequestProvider;
+use Illuminate\Support\ServiceProvider;
+
+class ApiSdkServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton('ApiSdk\GatewayApi', function ($app) {
+            return new GatewayRequestProvider($app->make('GuzzleHttp\Client'), env('GATEWAY_API_URL'), env('GATEWAY_API_ENV'), env('GATEWAY_API_APP'),
+                env('GATEWAY_API_APP_TOKEN'), env('APP_ENV')=='local');
+        });
+
+        $this->app->singleton('ApiSdk\DirectRequestProvider', function ($app) {
+            return new DirectRequestProvider($app->make('GuzzleHttp\Client'), env('APP_ENV')=='local');
+        });
+
+        $this->app->singleton('ApiSdk\AuthApi', function ($app) {
+            return new AuthApi($app->make('ApiSdk\GatewayRequestProvider'), env('AUTH_API_CLIENT_ID'), env('AUTH_API_CLIENT_SECRET'),
+                env('APP_URL').'/oauth_callback', env('GATEWAY_API_ENV'), env('GATEWAY_API_APP'));
+        });
+
+        $this->app->bind('ApiSdk\Contracts\RequestProvider',function($app){
+            return env('GATEWAY_API_URL') ? $app->make('ApiSdk\GatewayApi') : $app->make('ApiSdk\DirectRequestProvider');
+        });
+
+        $this->app->bind('coreapi',function($app){
+            return $app->make('ApiSdk\CoreApi');
+        });
+
+        $this->app->bind('filesapi',function($app){
+            return $app->make('ApiSdk\FilesApi');
+        });
+
+        $this->app->bind('authapi',function($app){
+            return $app->make('ApiSdk\AuthApi');
+        });
+    }
+}

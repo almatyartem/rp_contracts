@@ -2,25 +2,26 @@
 
 namespace ApiSdk;
 
+use ApiSdk\Contracts\RequestProvider;
+
 class CoreApi
 {
     /**
-     * @var GatewayApi
+     * @var RequestProvider
      */
-    public $gatewayApi;
+    public $provider;
 
-    /**
-     * @var string
-     */
-    protected $coreAppCode = 'core';
+    public $api;
 
     /**
      * CoreApi constructor.
-     * @param GatewayApi $gatewayApi
+     * @param RequestProvider $provider
+     * @param null $api
      */
-    public function __construct(GatewayApi $gatewayApi)
+    public function __construct(RequestProvider $provider, $api = null)
     {
-        $this->gatewayApi = $gatewayApi;
+        $this->provider = $provider;
+        $this->api = $api ?? 'core';
     }
 
     /**
@@ -28,7 +29,6 @@ class CoreApi
      * @param array $where
      * @param array $addParams
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function find(string $entity, array $where = [], array $addParams = []) : ?array
     {
@@ -49,7 +49,6 @@ class CoreApi
      * @param array $where
      * @param array $addParams
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function findFirst(string $entity, array $where = [], array $addParams = []) : ?array
     {
@@ -62,7 +61,6 @@ class CoreApi
      * @param string $entity
      * @param array $data
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
     public function create(string $entity, array $data) : ?array
@@ -82,7 +80,6 @@ class CoreApi
      * @param $id
      * @param array $data
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
     public function patch(string $entity, $id, array $data) : ?array
@@ -102,8 +99,6 @@ class CoreApi
      * @param $id
      * @param array $with
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Exception
      */
     public function show(string $entity, $id, $with = []) : ?array
     {
@@ -115,7 +110,6 @@ class CoreApi
      * @param $id
      * @param array $with
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
     public function delete(string $entity, $id, $with = []) : bool
@@ -136,7 +130,6 @@ class CoreApi
      * @param null $id
      * @param array $params
      * @return array|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function call(string $entity, string $method, $id = null, array $params = []) : ?array
     {
@@ -161,10 +154,6 @@ class CoreApi
 
         $uri = 'crud/'.$entity.($id ? '/'.$id : '').($getParams ? '?'.http_build_query($getParams) : '');
 
-        $response = $this->gatewayApi->request($this->coreAppCode, $requestMethod, $uri, $params);
-
-        $data = $this->gatewayApi->getData($response);
-
-        return $data;
+        return $this->provider->request($this->api, $requestMethod, $uri, $params);
     }
 }

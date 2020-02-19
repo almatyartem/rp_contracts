@@ -20,7 +20,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "ApiSdk\\GatewayServiceProvider"
+        "ApiSdk\\ApiSdkServiceProvider"
       ],
       "aliases": {
         "CoreApi": "ApiSdk\\Facades\\CoreApi",

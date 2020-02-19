@@ -2,13 +2,11 @@
 
 namespace ApiSdk;
 
+use ApiSdk\Contracts\RequestProvider;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
 
-class GatewayApi
+class GatewayRequestProvider implements RequestProvider
 {
     /**
      * @var Client
@@ -65,10 +63,9 @@ class GatewayApi
      * @param string $url
      * @param array $data
      * @param array $addHeaders
-     * @throws GuzzleException
-     * @return Response
+     * @return array
      */
-    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = []) : Response
+    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = []) : array
     {
         $options = [];
 
@@ -94,22 +91,13 @@ class GatewayApi
 
         try
         {
-            $result = $this->httpClient->request($method, $this->endpoint.'/'.$this->env.'/'.$api.'/'. $url, $options);
+            $response = $this->httpClient->request($method, $this->endpoint.'/'.$this->env.'/'.$api.'/'. $url, $options);
         }
         catch(ClientException $exception)
         {
-            return $exception->getResponse();
+            $response = $exception->getResponse();
         }
 
-        return $result;
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @return mixed
-     */
-    public function getData(ResponseInterface $response)
-    {
         return json_decode($response->getBody()->getContents(), true);
     }
 }

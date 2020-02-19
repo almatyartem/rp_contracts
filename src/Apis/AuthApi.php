@@ -2,19 +2,17 @@
 
 namespace ApiSdk;
 
+use ApiSdk\Contracts\RequestProvider;
 use GuzzleHttp\Exception\GuzzleException;
 
 class AuthApi
 {
     /**
-     * @var GatewayApi
+     * @var RequestProvider
      */
-    public $gatewayApi;
+    public $provider;
 
-    /**
-     * @var string
-     */
-    protected $authAppCode = 'auth';
+    public $api;
 
     /**
      * @var string
@@ -32,15 +30,34 @@ class AuthApi
     protected $oauthCallback;
 
     /**
-     * CoreApi constructor.
-     * @param GatewayApi $gatewayApi
+     * @var string
      */
-    public function __construct(GatewayApi $gatewayApi, string $clientId, string $clientSecret, string $oauthCallback)
+    public $env;
+
+    /**
+     * @var string
+     */
+    public $app;
+
+    /**
+     * AuthApi constructor.
+     * @param RequestProvider $provider
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param string $oauthCallback
+     * @param string $env
+     * @param string $app
+     * @param null $api
+     */
+    public function __construct(RequestProvider $provider, string $clientId, string $clientSecret, string $oauthCallback, string $env, string $app, $api = null)
     {
-        $this->gatewayApi = $gatewayApi;
+        $this->provider = $provider;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->oauthCallback = $oauthCallback;
+        $this->env = $env;
+        $this->app = $app;
+        $this->api = $api ?? 'files';
     }
 
     /**
@@ -49,13 +66,11 @@ class AuthApi
      */
     protected function getAppAccessToken()
     {
-        $response = $this->gatewayApi->request($this->authAppCode , 'post','oauth/token',  [
+        $data = $this->provider->request($this->api , 'post','oauth/token',  [
             'grant_type' => 'client_credentials',
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-        ], [], false);
-
-        $data = $this->gatewayApi->getData($response);
+        ], []);
 
         if($data and isset($data['access_token']) and $data['access_token'])
         {
@@ -71,17 +86,13 @@ class AuthApi
      */
     public function getClientToken($code) : ?string
     {
-        $this->accessToken = null;
-
-        $response = $this->gatewayApi->request($this->authAppCode , 'post','oauth/token',  [
+        $data = $this->provider->request($this->api , 'post','oauth/token',  [
             'grant_type' => 'authorization_code',
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'redirect_uri' => $this->oauthCallback,
             'code' => $code,
         ], []);
-
-        $data = $this->gatewayApi->getData($response);
 
         if($data and isset($data['access_token']) and $data['access_token'])
         {
@@ -97,12 +108,8 @@ class AuthApi
      */
     public function getUserByToken($token)
     {
-        $response = $this->gatewayApi->request($this->authAppCode , 'get','api/user?env='.$this->gatewayApi->env.'&app='.$this->gatewayApi->app,  [], [
+        return $this->provider->request($this->api , 'get','api/user?env='.$this->env.'&app='.$this->app,  [], [
             'Authorization' => 'Bearer ' .$token
         ]);
-
-        $user = $this->gatewayApi->getData($response);
-
-        return $user;
     }
 }
