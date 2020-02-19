@@ -19,13 +19,13 @@ class ApiSdkServiceProvider extends ServiceProvider
                 env('GATEWAY_API_APP_TOKEN'), env('APP_ENV')=='local');
         });
 
-        $this->app->singleton('ApiSdk\AuthApi', function ($app) {
-            return new AuthApi($app->make('ApiSdk\GatewayRequestProvider'), env('AUTH_API_CLIENT_ID'), env('AUTH_API_CLIENT_SECRET'),
-                env('APP_URL').'/oauth_callback', env('GATEWAY_API_ENV'), env('GATEWAY_API_APP'), env('AUTHAPI_ENDPOINT'));
+        $this->app->singleton('ApiSdk\Contracts\RequestProvider',function($app){
+            return env('GATEWAY_API_URL') ? $app->make('ApiSdk\GatewayApi') : $app->make('ApiSdk\DirectRequestProvider');
         });
 
-        $this->app->bind('ApiSdk\Contracts\RequestProvider',function($app){
-            return env('GATEWAY_API_URL') ? $app->make('ApiSdk\GatewayApi') : $app->make('ApiSdk\DirectRequestProvider');
+        $this->app->singleton('ApiSdk\AuthApi', function ($app) {
+            return new AuthApi($app->make('ApiSdk\Contracts\RequestProvider'), env('AUTH_API_CLIENT_ID'), env('AUTH_API_CLIENT_SECRET'),
+                env('APP_URL').'/oauth_callback', env('GATEWAY_API_ENV'), env('GATEWAY_API_APP'), env('AUTHAPI_ENDPOINT'));
         });
 
         $this->app->when('ApiSdk\DirectRequestProvider')
