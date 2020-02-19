@@ -24,7 +24,6 @@
       ],
       "aliases": {
         "CoreApi": "ApiSdk\\Facades\\CoreApi",
-        "ReportsApi": "ApiSdk\\Facades\\ReportsApi",
         "FilesApi": "ApiSdk\\Facades\\FilesApi",
         "AuthApi": "ApiSdk\\Facades\\AuthApi"
       }
