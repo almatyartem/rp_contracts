@@ -3,8 +3,6 @@
 namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Facades\Log;
 
 class CoreApi
 {
@@ -47,10 +45,8 @@ class CoreApi
         {
             return $this->call($entity, 'all', null, $params);
         }
-        catch(RequestException $exception)
+        catch(RequestProviderException $exception)
         {
-            Log::error($exception->getMessage());
-
             return null;
         }
     }
@@ -80,17 +76,11 @@ class CoreApi
         {
             return $this->call($entity, 'create', null, $data);
         }
-        catch(RequestException $exception)
+        catch(RequestProviderException $exception)
         {
-            $result = $exception->getResponse();
-
-            if(isset($result['error']['validation_errors']))
+            if($error = $exception->getError() and isset($error['validation_errors']))
             {
-                throw new \Exception(json_encode($result['error']['validation_errors']), 666);
-            }
-            else
-            {
-                Log::error($exception->getMessage());
+                throw new \Exception(json_encode($error['validation_errors']), 666);
             }
 
             return null;
@@ -110,17 +100,11 @@ class CoreApi
         {
             return $this->call($entity, 'patch', $id, $data);
         }
-        catch(RequestException $exception)
+        catch(RequestProviderException $exception)
         {
-            $result = $exception->getResponse();
-
-            if(isset($result['error']['validation_errors']))
+            if($error = $exception->getError() and isset($error['validation_errors']))
             {
-                throw new \Exception(json_encode($result['error']['validation_errors']), 666);
-            }
-            else
-            {
-                Log::error($exception->getMessage());
+                throw new \Exception(json_encode($error['validation_errors']), 666);
             }
 
             return null;
@@ -139,10 +123,8 @@ class CoreApi
         {
             return $this->call($entity, 'show', $id, $with ? ['with' => $with] : []);
         }
-        catch(RequestException $exception)
+        catch(RequestProviderException $exception)
         {
-            Log::error($exception->getMessage());
-
             return null;
         }
     }
@@ -162,17 +144,11 @@ class CoreApi
 
             return $result['success'] ?? false;
         }
-        catch(RequestException $exception)
+        catch(RequestProviderException $exception)
         {
-            $result = $exception->getResponse();
-
-            if(isset($result['error']['relations_exist']))
+            if($error = $exception->getError() and isset($error['relations_exist']))
             {
-                throw new \Exception(json_encode($result['error']['relations_exist']), 666);
-            }
-            else
-            {
-                Log::error($exception->getMessage());
+                throw new \Exception(json_encode($error['relations_exist']), 666);
             }
 
             return false;
@@ -184,8 +160,8 @@ class CoreApi
      * @param string $method
      * @param null $id
      * @param array $params
-     * @throw RequestException
      * @return array|null
+     * @throws RequestProviderException
      */
     protected function call(string $entity, string $method, $id = null, array $params = []) : ?array
     {

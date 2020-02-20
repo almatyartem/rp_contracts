@@ -5,6 +5,7 @@ namespace ApiSdk;
 use ApiSdk\Contracts\RequestProvider;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class DirectRequestProvider implements RequestProvider
 {
@@ -36,6 +37,7 @@ class DirectRequestProvider implements RequestProvider
      * @param array $data
      * @param array $addHeaders
      * @return array
+     * @throws RequestProviderException
      */
     public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = []) : array
     {
@@ -58,7 +60,14 @@ class DirectRequestProvider implements RequestProvider
             $url .= (strpos($url,'?') ? '&' : '?').'XDEBUG_SESSION_START=PHPSTORM';
         }
 
-        $response = $this->httpClient->request($method, $api.'/'. $url, $options);
+        try
+        {
+            $response = $this->httpClient->request($method, $api . '/' . $url, $options);
+        }
+        catch(RequestException $exception)
+        {
+            throw new RequestProviderException($exception);
+        }
 
         return json_decode($response->getBody()->getContents(), true);
     }
