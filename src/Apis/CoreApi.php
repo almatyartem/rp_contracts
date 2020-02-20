@@ -4,6 +4,7 @@ namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Log;
 
 class CoreApi
 {
@@ -48,6 +49,8 @@ class CoreApi
         }
         catch(ClientException $exception)
         {
+            Log::error($exception->getMessage());
+
             return null;
         }
     }
@@ -85,6 +88,10 @@ class CoreApi
             {
                 throw new \Exception(json_encode($result['error']['validation_errors']), 666);
             }
+            else
+            {
+                Log::error($exception->getMessage());
+            }
 
             return null;
         }
@@ -111,6 +118,10 @@ class CoreApi
             {
                 throw new \Exception(json_encode($result['error']['validation_errors']), 666);
             }
+            else
+            {
+                Log::error($exception->getMessage());
+            }
 
             return null;
         }
@@ -130,6 +141,8 @@ class CoreApi
         }
         catch(ClientException $exception)
         {
+            Log::error($exception->getMessage());
+
             return null;
         }
     }
@@ -156,6 +169,10 @@ class CoreApi
             if(isset($result['error']['relations_exist']))
             {
                 throw new \Exception(json_encode($result['error']['relations_exist']), 666);
+            }
+            else
+            {
+                Log::error($exception->getMessage());
             }
 
             return false;
