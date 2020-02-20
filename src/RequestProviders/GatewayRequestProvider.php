@@ -64,10 +64,10 @@ class GatewayRequestProvider implements RequestProvider
      * @param string $url
      * @param array $data
      * @param array $addHeaders
-     * @return array
+     * @return mixed
      * @throws RequestProviderException
      */
-    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = []) : array
+    public function request(string $api, string $method, string $url, array $data = [], array $addHeaders = [])
     {
         $options = [];
 
