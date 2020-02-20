@@ -3,7 +3,7 @@
 namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 
 class CoreApi
@@ -47,7 +47,7 @@ class CoreApi
         {
             return $this->call($entity, 'all', null, $params);
         }
-        catch(ClientException $exception)
+        catch(RequestException $exception)
         {
             Log::error($exception->getMessage());
 
@@ -80,7 +80,7 @@ class CoreApi
         {
             return $this->call($entity, 'create', null, $data);
         }
-        catch(ClientException $exception)
+        catch(RequestException $exception)
         {
             $result = $exception->getResponse();
 
@@ -110,7 +110,7 @@ class CoreApi
         {
             return $this->call($entity, 'patch', $id, $data);
         }
-        catch(ClientException $exception)
+        catch(RequestException $exception)
         {
             $result = $exception->getResponse();
 
@@ -139,7 +139,7 @@ class CoreApi
         {
             return $this->call($entity, 'show', $id, $with ? ['with' => $with] : []);
         }
-        catch(ClientException $exception)
+        catch(RequestException $exception)
         {
             Log::error($exception->getMessage());
 
@@ -162,7 +162,7 @@ class CoreApi
 
             return $result['success'] ?? false;
         }
-        catch(ClientException $exception)
+        catch(RequestException $exception)
         {
             $result = $exception->getResponse();
 
@@ -184,6 +184,7 @@ class CoreApi
      * @param string $method
      * @param null $id
      * @param array $params
+     * @throw RequestException
      * @return array|null
      */
     protected function call(string $entity, string $method, $id = null, array $params = []) : ?array
