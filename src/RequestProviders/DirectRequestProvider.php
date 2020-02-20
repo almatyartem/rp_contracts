@@ -58,14 +58,7 @@ class DirectRequestProvider implements RequestProvider
             $url .= (strpos($url,'?') ? '&' : '?').'XDEBUG_SESSION_START=PHPSTORM';
         }
 
-        try
-        {
-            $response = $this->httpClient->request($method, $api.'/'. $url, $options);
-        }
-        catch(ClientException $exception)
-        {
-            $response = $exception->getResponse();
-        }
+        $response = $this->httpClient->request($method, $api.'/'. $url, $options);
 
         return json_decode($response->getBody()->getContents(), true);
     }

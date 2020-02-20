@@ -3,6 +3,7 @@
 namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
+use GuzzleHttp\Exception\ClientException;
 
 class CoreApi
 {
@@ -41,7 +42,14 @@ class CoreApi
 
         $params = array_merge($params, $addParams);
 
-        return $this->call($entity, 'all', null, $params);
+        try
+        {
+            return $this->call($entity, 'all', null, $params);
+        }
+        catch(ClientException $exception)
+        {
+            return null;
+        }
     }
 
     /**
@@ -65,14 +73,21 @@ class CoreApi
      */
     public function create(string $entity, array $data) : ?array
     {
-        $result = $this->call($entity, 'create', null, $data);
-
-        if(isset($result['error']['validation_errors']))
+        try
         {
-            throw new \Exception(json_encode($result['error']['validation_errors']), 666);
+            return $this->call($entity, 'create', null, $data);
         }
+        catch(ClientException $exception)
+        {
+            $result = $exception->getResponse();
 
-        return $result;
+            if(isset($result['error']['validation_errors']))
+            {
+                throw new \Exception(json_encode($result['error']['validation_errors']), 666);
+            }
+
+            return null;
+        }
     }
 
     /**
@@ -84,14 +99,21 @@ class CoreApi
      */
     public function patch(string $entity, $id, array $data) : ?array
     {
-        $result = $this->call($entity, 'patch', $id, $data);
-
-        if(isset($result['error']['validation_errors']))
+        try
         {
-            throw new \Exception(json_encode($result['error']['validation_errors']), 666);
+            return $this->call($entity, 'patch', $id, $data);
         }
+        catch(ClientException $exception)
+        {
+            $result = $exception->getResponse();
 
-        return $result;
+            if(isset($result['error']['validation_errors']))
+            {
+                throw new \Exception(json_encode($result['error']['validation_errors']), 666);
+            }
+
+            return null;
+        }
     }
 
     /**
@@ -102,7 +124,14 @@ class CoreApi
      */
     public function show(string $entity, $id, $with = []) : ?array
     {
-        return $this->call($entity, 'show', $id, $with ? ['with' => $with] : []);
+        try
+        {
+            return $this->call($entity, 'show', $id, $with ? ['with' => $with] : []);
+        }
+        catch(ClientException $exception)
+        {
+            return null;
+        }
     }
 
     /**
@@ -114,14 +143,23 @@ class CoreApi
      */
     public function delete(string $entity, $id, $with = []) : bool
     {
-        $result = $this->call($entity, 'delete', $id, $with ? ['with' => $with] : []);
-
-        if(isset($result['error']['relations_exist']))
+        try
         {
-            throw new \Exception(json_encode($result['error']['relations_exist']), 666);
-        }
+            $result = $this->call($entity, 'delete', $id, $with ? ['with' => $with] : []);
 
-        return $result['success'] ?? false;
+            return $result['success'] ?? false;
+        }
+        catch(ClientException $exception)
+        {
+            $result = $exception->getResponse();
+
+            if(isset($result['error']['relations_exist']))
+            {
+                throw new \Exception(json_encode($result['error']['relations_exist']), 666);
+            }
+
+            return false;
+        }
     }
 
     /**
