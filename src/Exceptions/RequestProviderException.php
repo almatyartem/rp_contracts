@@ -13,7 +13,7 @@ use Throwable;
 class RequestProviderException extends \Exception
 {
     /**
-     * @var array|null
+     * @var array|string|null
      */
     protected $error;
 
@@ -42,7 +42,7 @@ class RequestProviderException extends \Exception
         parent::__construct($exception->getMessage());
     }
 
-    public function getError() : ?array
+    public function getError()
     {
         return $this->error;
     }
