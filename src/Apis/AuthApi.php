@@ -87,6 +87,34 @@ class AuthApi
     }
 
     /**
+     * @param $email
+     * @param $password
+     * @return string|null
+     */
+    public function getClientTokenByAuth($email, $password) : ?string
+    {
+        try
+        {
+            $data = $this->provider->request($this->api,'post','oauth/token',  [
+                'grant_type' => 'password',
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'username' => $email,
+                'password' => $password,
+                'scope' => '',
+            ]);
+        }
+        catch(RequestProviderException $exception){}
+
+        if($data and isset($data['access_token']) and $data['access_token'])
+        {
+            return $data['access_token'];
+        }
+
+        return null;
+    }
+
+    /**
      * @param $token
      * @return mixed
      */
@@ -94,7 +122,7 @@ class AuthApi
     {
         try
         {
-            $data = $this->provider->request($this->api , 'get','api/user?env='.$this->env.'&app='.$this->app,  [], [
+            $data = $this->provider->request($this->api, 'get','api/user?env='.$this->env.'&app='.$this->app,  [], [
                 'Authorization' => 'Bearer ' .$token
             ]);
 
