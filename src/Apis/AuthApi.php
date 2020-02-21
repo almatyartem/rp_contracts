@@ -61,43 +61,28 @@ class AuthApi
     }
 
     /**
-     * @return null
-     * @throws GuzzleException
-     */
-    protected function getAppAccessToken()
-    {
-        $data = $this->provider->request($this->api , 'post','oauth/token',  [
-            'grant_type' => 'client_credentials',
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
-        ], []);
-
-        if($data and isset($data['access_token']) and $data['access_token'])
-        {
-            return $data['access_token'];
-        }
-
-        return null;
-    }
-
-    /**
      * @param $code
      * @return string|null
      */
     public function getClientToken($code) : ?string
     {
-        $data = $this->provider->request($this->api , 'post','oauth/token',  [
-            'grant_type' => 'authorization_code',
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
-            'redirect_uri' => $this->oauthCallback,
-            'code' => $code,
-        ], []);
-
-        if($data and isset($data['access_token']) and $data['access_token'])
+        try
         {
-            return $data['access_token'];
+            $data = $this->provider->request($this->api , 'post','oauth/token',  [
+                'grant_type' => 'authorization_code',
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'redirect_uri' => $this->oauthCallback,
+                'code' => $code,
+            ], []);
+
+
+            if($data and isset($data['access_token']) and $data['access_token'])
+            {
+                return $data['access_token'];
+            }
         }
+        catch(RequestProviderException $exception){}
 
         return null;
     }
@@ -106,10 +91,76 @@ class AuthApi
      * @param $token
      * @return mixed
      */
-    public function getUserByToken($token)
+    public function getUserByToken($token) : ?array
     {
-        return $this->provider->request($this->api , 'get','api/user?env='.$this->env.'&app='.$this->app,  [], [
-            'Authorization' => 'Bearer ' .$token
-        ]);
+        try
+        {
+            $data = $this->provider->request($this->api , 'get','api/user?env='.$this->env.'&app='.$this->app,  [], [
+                'Authorization' => 'Bearer ' .$token
+            ]);
+
+            if(is_array($data))
+            {
+                return $data;
+            }
+        }
+        catch(RequestProviderException $exception){}
+
+        return null;
+    }
+
+    /**
+     * @param $token
+     * @param null $name
+     * @param null $email
+     * @param null $password
+     * @return array|null
+     */
+    public function editUserByToken($token, $name = null, $email = null, $password = null) : ?array
+    {
+        try
+        {
+            $data = $this->provider->request($this->api , 'post','api/user', [
+                'name' => $name,
+                'email' => $email,
+                'password' => $password
+            ], [
+                'Authorization' => 'Bearer ' .$token
+            ]);
+
+            if(is_array($data))
+            {
+                return $data;
+            }
+        }
+        catch(RequestProviderException $exception){}
+
+        return null;
+    }
+
+    /**
+     * @param $email
+     * @param $name
+     * @param $password
+     * @return array|null
+     */
+    public function createUser($email, $name, $password) : ?array
+    {
+        try
+        {
+            $data = $this->provider->request($this->api , 'post','api/register', [
+                'email' => $email,
+                'name' => $name,
+                'password' => $password
+            ]);
+
+            if(is_array($data))
+            {
+                return $data;
+            }
+        }
+        catch(RequestProviderException $exception){}
+
+        return null;
     }
 }
