@@ -2,7 +2,6 @@
 
 namespace ApiSdk;
 
-use App\DirectRequestProvider;
 use Illuminate\Support\ServiceProvider;
 
 class ApiSdkServiceProvider extends ServiceProvider

@@ -4,7 +4,6 @@ namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
 class GatewayRequestProvider implements RequestProvider

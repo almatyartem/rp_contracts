@@ -3,7 +3,6 @@
 namespace ApiSdk;
 
 use ApiSdk\Contracts\RequestProvider;
-use GuzzleHttp\Exception\GuzzleException;
 
 class AuthApi
 {
