@@ -277,9 +277,7 @@ class CoreApi
     {
         try
         {
-            $result = $this->unsafeDelete($entity, $id, $with);
-
-            return $result['success'] ?? false;
+            return $this->unsafeDelete($entity, $id, $with);
         }
         catch(RequestProviderException $exception)
         {
