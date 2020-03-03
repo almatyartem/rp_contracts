@@ -33,10 +33,9 @@ class RequestProviderException extends \Exception
                 }
             }
         }
-
-        if($exception->getCode() != 400)
+        elseif($exception->getCode() != 400)
         {
-            Log::error($this->getMessage());
+            Log::error($exception->getCode().' '.$exception->getMessage());
         }
 
         parent::__construct($exception->getMessage());
