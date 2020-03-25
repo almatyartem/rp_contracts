@@ -28,9 +28,9 @@ class FilesApi
      * @param $image
      * @return string|null
      */
-    public function uploadImage($image) : ?string
+    public function uploadImage($image, $dir = null) : ?string
     {
-        $result = $this->provider->request($this->api , 'post','images/add',  ['image' => $image]);
+        $result = $this->provider->request($this->api , 'post','images/add',  ['image' => $image, 'dir' => $dir]);
 
         return $result['code'] ?? null;
     }
