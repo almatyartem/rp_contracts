@@ -196,7 +196,7 @@ class CoreApi
     }
 
     /**
-     * @param string $entity
+     * @param  string $entity
      * @param $id
      * @param string $field
      * @return array|null
