@@ -198,6 +198,23 @@ class CoreApi
     /**
      * @param string $entity
      * @param $id
+     * @param string $field
+     * @return array|null
+     */
+    public function increment(string $entity, $id, string $field): ?array
+    {
+        try
+        {
+            return $this->call($entity, 'increment', $id.'/'.$field);
+        }
+        catch(RequestProviderException $exception){}
+
+        return null;
+    }
+
+    /**
+     * @param string $entity
+     * @param $id
      * @param array $data
      * @return array|null
      */
@@ -343,6 +360,7 @@ class CoreApi
                 $requestMethod = 'delete';
                 break;
             case 'patch':
+            case 'increment':
                 $requestMethod = 'patch';
                 break;
             default:
