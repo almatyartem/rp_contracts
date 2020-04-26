@@ -1,5 +1,5 @@
 {
-  "name": "apisdk/apisdk",
+  "name": "apisdk/request_providers",
   "description": "API SDK",
   "require": {
     "php": ">=7.1",
