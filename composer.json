@@ -20,13 +20,8 @@
   "extra": {
     "laravel": {
       "providers": [
-        "ApiSdk\\ApiSdkServiceProvider"
-      ],
-      "aliases": {
-        "CoreApi": "ApiSdk\\Facades\\CoreApi",
-        "FilesApi": "ApiSdk\\Facades\\FilesApi",
-        "AuthApi": "ApiSdk\\Facades\\AuthApi"
-      }
+        "ApiSdk\\RpServiceProvider"
+      ]
     }
   }
 }
