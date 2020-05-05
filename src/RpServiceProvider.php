@@ -2,7 +2,6 @@
 
 namespace ApiSdk;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class RpServiceProvider extends ServiceProvider
@@ -14,7 +13,7 @@ class RpServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('ApiSdk\Contracts\RequestProvider',function(Application $app){
+        $this->app->singleton('ApiSdk\Contracts\RequestProvider',function($app){
             return env('GATEWAY_API_URL') ? $app->make('ApiSdk\GatewayApi') : $app->make('ApiSdk\DirectRequestProvider');
         });
 
