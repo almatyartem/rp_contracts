@@ -31,6 +31,10 @@ class RequestProviderException extends \Exception
                 {
                     $this->error = $contents['error'];
                 }
+                elseif(isset($contents['errors']) and is_array($contents['errors']))
+                {
+                    $this->error = ['validation_errors' => $contents['errors']];
+                }
             }
         }
         elseif($exception->getCode() != 400)
