@@ -21,12 +21,11 @@ class DirectRequestProvider implements RequestProvider
 
     /**
      * DirectRequestProvider constructor.
-     * @param Client $httpClient
      * @param bool $isDebug
      */
-    public function __construct(Client $httpClient, bool $isDebug = false)
+    public function __construct(bool $isDebug = false)
     {
-        $this->httpClient = $httpClient;
+        $this->httpClient = new Client(['verify' => false]);
         $this->isDebug = $isDebug;
     }
 
