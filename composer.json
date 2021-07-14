@@ -1,10 +1,9 @@
 {
-    "name": "turbodev/guzzle_wrapper",
-    "description": "Guzzle wrapper",
+    "name": "turbodev/response_wrapper",
+    "description": "Response wrapper",
     "require": {
         "php": "^7.4|^8.0",
-        "ext-json": "*",
-        "guzzlehttp/guzzle": "^7.2"
+        "ext-json": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -13,7 +12,7 @@
             "src"
         ],
         "psr-4": {
-            "GuzzleWrapper\\": "src/"
+            "ResponseWrapper\\": "src/"
         }
     }
 }

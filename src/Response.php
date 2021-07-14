@@ -1,11 +1,11 @@
 <?php
 
-namespace GuzzleWrapper;
+namespace ResponseWrapper;
 
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class ResultWrapper
+class Response
 {
     /**
      * @var ResponseInterface|null
