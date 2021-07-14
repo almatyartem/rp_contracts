@@ -29,11 +29,19 @@ class Response
     }
 
     /**
+     * @return string|null
+     */
+    public function getRawContents() : ?string
+    {
+        return ($this->response ? $this->response->getBody()->getContents() : null);
+    }
+
+    /**
      * @return array|null
      */
     public function getContents() : ?array
     {
-        return $this->response ? @json_decode((string)$this->response->getBody()->getContents(), true) : null;
+        return $this->response ? @json_decode($this->getRawContents(), true) : null;
     }
 
     /**
