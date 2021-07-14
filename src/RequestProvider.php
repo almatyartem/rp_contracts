@@ -28,68 +28,29 @@ class RequestProvider
     protected int $sleepTimeBetweenAttempts;
 
     /**
+     * @var LoggerInterface|null
+     */
+    protected ?LoggerInterface $logger;
+
+    /**
      * RequestProvider constructor.
      * @param string $endpoint
      * @param int $attemptsCountWhenServerError
      * @param int $sleepTimeBetweenAttempts
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         string $endpoint,
         int $attemptsCountWhenServerError = 1,
-        int $sleepTimeBetweenAttempts = 1
+        int $sleepTimeBetweenAttempts = 1,
+        LoggerInterface $logger = null
     )
     {
         $this->httpClient = new Client(['verify' => false]);
         $this->endpoint = $endpoint;
         $this->attemptsCountWhenServerError = $attemptsCountWhenServerError;
         $this->sleepTimeBetweenAttempts = $sleepTimeBetweenAttempts;
-    }
-
-    /**
-     * @param string $url
-     * @param array $data
-     * @param array $addHeaders
-     * @return ResultWrapper
-     */
-    public function get(string $url, array $data = [], array $addHeaders = []) : ResultWrapper
-    {
-        return $this->request($url, 'get', $data, $addHeaders);
-    }
-
-    /**
-     * @param string $url
-     * @param array $data
-     * @param array $addHeaders
-     * @param bool $postAsForm
-     * @return ResultWrapper
-     */
-    public function post(string $url, array $data = [], array $addHeaders = [], bool $postAsForm = false) : ResultWrapper
-    {
-        return $this->request($url, 'post', $data, $addHeaders, $postAsForm);
-    }
-
-    /**
-     * @param string $url
-     * @param array $data
-     * @param array $addHeaders
-     * @param bool $postAsForm
-     * @return ResultWrapper
-     */
-    public function patch(string $url, array $data = [], array $addHeaders = [], bool $postAsForm = false) : ResultWrapper
-    {
-        return $this->request($url, 'patch', $data, $addHeaders, $postAsForm);
-    }
-
-    /**
-     * @param string $url
-     * @param array $data
-     * @param array $addHeaders
-     * @param bool $postAsForm
-     * @return ResultWrapper
-     */
-    public function delete(string $url, array $data = [], array $addHeaders = [], bool $postAsForm = false) : ResultWrapper
-    {
-        return $this->request($url, 'delete', $data, $addHeaders, $postAsForm);
+        $this->logger = $logger;
     }
 
     /**
@@ -101,7 +62,7 @@ class RequestProvider
      * @param bool $postAsForm
      * @return ResultWrapper
      */
-    protected function request(string $url, string $method = 'get', array $data = [], array $addHeaders = [], bool $postAsForm = false) : ResultWrapper
+    public function request(string $url, string $method = 'get', array $data = [], array $addHeaders = [], bool $postAsForm = false) : ResultWrapper
     {
         $options = [];
 
@@ -124,7 +85,14 @@ class RequestProvider
             $options['headers'] = array_merge($options['headers'], $addHeaders);
         }
 
-        return $this->sendRequestHandler($url, $method, $options);
+        $response = $this->sendRequestHandler($url, $method, $options);
+
+        if($this->logger)
+        {
+            $this->logger->log($response);
+        }
+
+        return $response;
     }
 
     /**
