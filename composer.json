@@ -1,11 +1,10 @@
 {
-    "name": "apisdk/request_providers",
-    "description": "API SDK",
+    "name": "turbodev/guzzle_wrapper",
+    "description": "Guzzle wrapper",
     "require": {
-        "php": ">=7.1",
+        "php": "^7.4|^8.0",
         "ext-json": "*",
-        "illuminate/support": "*",
-        "guzzlehttp/guzzle": ">=6.4"
+        "guzzlehttp/guzzle": "^7.2"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -14,14 +13,7 @@
             "src"
         ],
         "psr-4": {
-            "ApiSdk\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "ApiSdk\\RpServiceProvider"
-            ]
+            "GuzzleWrapper\\": "src/"
         }
     }
 }
