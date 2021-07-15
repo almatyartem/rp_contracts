@@ -8,9 +8,9 @@ use Throwable;
 class Response
 {
     /**
-     * @var ResponseInterface|null
+     * @var string|null
      */
-    protected ?ResponseInterface $response;
+    protected ?string $response;
 
     /**
      * @var Throwable[]
@@ -24,7 +24,7 @@ class Response
      */
     public function __construct(ResponseInterface $response = null, array $errorsBag = null)
     {
-        $this->response = $response;
+        $this->response = ($response ? $response->getBody()->getContents() : null);
         $this->errorsBag = $errorsBag;
     }
 
@@ -33,7 +33,7 @@ class Response
      */
     public function getRawContents() : ?string
     {
-        return ($this->response ? $this->response->getBody()->getContents() : null);
+        return $this->response;
     }
 
     /**
@@ -41,7 +41,7 @@ class Response
      */
     public function getContents() : ?array
     {
-        return $this->response ? @json_decode($this->getRawContents(), true) : null;
+        return $this->response ? @json_decode($this->response, true) : null;
     }
 
     /**
