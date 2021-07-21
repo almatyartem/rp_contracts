@@ -1,10 +1,7 @@
 {
-    "name": "turbodev/response_wrapper",
-    "description": "Response wrapper",
-    "require": {
-        "php": "^7.4|^8.0",
-        "ext-json": "*"
-    },
+    "name": "turbodev/rp_contracts",
+    "description": "Request providers contracts",
+    "require": {},
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
@@ -12,7 +9,7 @@
             "src"
         ],
         "psr-4": {
-            "ResponseWrapper\\": "src/"
+            "RpContracts\\": "src/"
         }
     }
 }
