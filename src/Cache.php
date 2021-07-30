@@ -7,9 +7,10 @@ interface Cache
     /**
      * @param string $uri
      * @param Response $result
+     * @param int|null $ttl
      * @return bool
      */
-    public function put(string $uri, Response $result) : bool;
+    public function put(string $uri, Response $result, int $ttl = null) : bool;
 
     /**
      * @param string $uri
