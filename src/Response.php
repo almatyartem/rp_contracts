@@ -27,4 +27,9 @@ interface Response
      * @return bool
      */
     public function isSuccess() : bool;
+
+    /**
+     * @return int
+     */
+    public function getStatusCode() : int;
 }
