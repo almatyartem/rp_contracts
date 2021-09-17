@@ -5,6 +5,11 @@ namespace RpContracts;
 interface RequestData
 {
     /**
+     * @return $this
+     */
+    public function ignoreCache() : self;
+
+    /**
      * @return string
      */
     public function getUrl() : string;
