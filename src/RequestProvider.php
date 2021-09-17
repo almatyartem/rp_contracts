@@ -21,4 +21,10 @@ interface RequestProvider
         bool $postAsForm = false,
         int $cacheTtl = null
     ) : Response;
+
+    /**
+     * @param RequestData $data
+     * @return Response
+     */
+    public function performRequest(RequestData $data) : Response;
 }
