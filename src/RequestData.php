@@ -33,4 +33,9 @@ interface RequestData
      * @return int|null
      */
     public function getCacheTtl() : ?int;
+
+    /**
+     * @return bool
+     */
+    public function shouldIgnoreCache() : bool;
 }

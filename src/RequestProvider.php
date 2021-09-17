@@ -11,6 +11,7 @@ interface RequestProvider
      * @param array $addHeaders
      * @param bool $postAsForm
      * @param int|null $cacheTtl
+     * @param bool $ignoreCache
      * @return Response
      */
     public function request(
@@ -19,7 +20,8 @@ interface RequestProvider
         array $data = [],
         array $addHeaders = [],
         bool $postAsForm = false,
-        int $cacheTtl = null
+        int $cacheTtl = null,
+        bool $ignoreCache = false
     ) : Response;
 
     /**
